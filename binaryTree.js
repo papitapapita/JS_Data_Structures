@@ -92,8 +92,28 @@ class BinaryTree {
         return node.value + leftSum + rightSum;
     }
 
+    minimunValue() {
+        let currentNode = this.root;
+
+        while(currentNode.left) {
+            currentNode = currentNode.left;
+        }
+
+        return currentNode.value;
+    }
+
     isEmpty() {
         return !this.root;
+    }
+
+    maxPathSum(node) {
+        if (!node) return 0;
+
+        let leftSum = this.maxPathSum(node.left);
+        let rightSum = this.maxPathSum(node.right);
+
+        return node.value + Math.max(leftSum, rightSum);
+
     }
 }
 
@@ -145,8 +165,14 @@ function runTests() {
 
     //Test 8: Ensure `sumTree` function works witout erres
     console.log('Summing all values of the tree: ');
-    bt.sumTree(bt.root);
+    console.assert(bt.sumTree(bt.root) === 70, "Test 8 Failed: It should return the sum of all the tree which is 80");
+    
+    //Test 9: Ensure `minimumValue` function works properly
+    console.log('Finding the minimun value: ');
+    console.assert(bt.minimunValue(bt.root) === 3 , "Test 9 Failed, minimun value returned is not 3");
 
+    //Test 10. Maximun sum of a path from a leaf to the root
+    console.assert(bt.maxPathSum(bt.root) === 43, "Test 10 Failed, maximun value returned is not 43")
     console.log('All tests passed.');
 }
 

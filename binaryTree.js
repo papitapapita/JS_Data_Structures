@@ -107,7 +107,10 @@ class BinaryTree {
     }
 
     maxPathSum(node) {
-        if (!node) return 0;
+        if (!node) return -Infinity;
+
+        if (!node.left && !node.right)
+            return node.value;
 
         let leftSum = this.maxPathSum(node.left);
         let rightSum = this.maxPathSum(node.right);
@@ -173,6 +176,7 @@ function runTests() {
 
     //Test 10. Maximun sum of a path from a leaf to the root
     console.assert(bt.maxPathSum(bt.root) === 43, "Test 10 Failed, maximun value returned is not 43")
+    console.log(bt.maxPathSum(bt.root))
     console.log('All tests passed.');
 }
 

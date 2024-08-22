@@ -60,6 +60,23 @@ class BinaryTree {
         }
     }
 
+    static toArray(bt) {
+        debugger;
+        return bt.searchTree(bt.root);
+    }
+
+    searchTree(node) {
+        if(!node) return [];
+
+        let leftElements = this.searchTree(node.left);
+        let rightElements = this.searchTree(node.right);
+        return [
+            ...leftElements,
+            node.value,
+            ...rightElements
+        ];
+    }
+
     static printTree(node) {
         if(!node) return null;
 
@@ -114,6 +131,10 @@ function runTests() {
     // Test 6: Ensure `printTree` function works without errors
     console.log('Printing tree:');
     BinaryTree.printTree(bt.root);
+
+    //Test 7: Ensure `searchTree` function works without erres
+    console.log('Converting tree to array: ');
+    BinaryTree.toArray(bt);
 
     console.log('All tests passed.');
 }

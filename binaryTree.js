@@ -12,16 +12,23 @@ class BinaryTree {
     }
 
     insert(value) {
-        const newNode = new this.#Node(value);
-
-        if ( this.isEmpty() ) {
-            this.root = newNode;
-        } else {
-            this.#insertNode(this.root, newNode);
+        try {
+            const newNode = new this.#Node(value);
+    
+            if ( this.isEmpty() ) {
+                this.root = newNode;
+            } else {
+                this.#insertNode(this.root, newNode);
+            }
+        } catch(err) {
+            console.error('Something went wrong: ' + err.message)
         }
     }
 
     #insertNode(node, newNode) {
+        if (newNode.value === node.value)
+            throw new Error('This value already exists');
+
         if (newNode.value < node.value) {
             if (!node.left) {
                 node.left = newNode;
@@ -56,12 +63,59 @@ class BinaryTree {
     static printTree(node) {
         if(!node) return null;
 
+        BinaryTree.printTree(node.left);
         console.log(node.value);
-        printTree(node.left);
-        printTree(node.right);
+        BinaryTree.printTree(node.right);
     }
 
     isEmpty() {
         return !this.root;
     }
 }
+
+function runTests() {
+    let bt;
+
+    // Test 1: Create an empty tree and check if it's empty
+    bt = new BinaryTree();
+    console.assert(bt.isEmpty() === true, 'Test 1 Failed: Tree should be empty initially');
+
+    // Test 2: Insert a value into the tree and check if it's no longer empty
+    bt.insert(10);
+    console.assert(bt.isEmpty() === false, 'Test 2 Failed: Tree should not be empty after insertion');
+    console.assert(bt.root.value === 10, 'Test 2 Failed: Root should be 10');
+
+    // Test 3: Insert multiple values and check the tree structure
+    bt.insert(5);
+    bt.insert(15);
+    bt.insert(3);
+    bt.insert(7);
+    bt.insert(12);
+    bt.insert(18);
+
+    console.assert(bt.root.left.value === 5, 'Test 3 Failed: Left child of root should be 5');
+    console.assert(bt.root.right.value === 15, 'Test 3 Failed: Right child of root should be 15');
+    console.assert(bt.root.left.left.value === 3, 'Test 3 Failed: Left child of 5 should be 3');
+    console.assert(bt.root.left.right.value === 7, 'Test 3 Failed: Right child of 5 should be 7');
+    console.assert(bt.root.right.left.value === 12, 'Test 3 Failed: Left child of 15 should be 12');
+    console.assert(bt.root.right.right.value === 18, 'Test 3 Failed: Right child of 15 should be 18');
+
+    // Test 4: Search for values in the tree
+    console.assert(bt.search(10) === true, 'Test 4 Failed: Should find 10 in the tree');
+    console.assert(bt.search(5) === true, 'Test 4 Failed: Should find 5 in the tree');
+    console.assert(bt.search(18) === true, 'Test 4 Failed: Should find 18 in the tree');
+    console.assert(bt.search(1) === false, 'Test 4 Failed: Should not find 1 in the tree');
+    console.assert(bt.search(20) === false, 'Test 4 Failed: Should not find 20 in the tree');
+
+    // Test 5: Insert a duplicate value and ensure tree structure remains valid
+    bt.insert(10);
+    console.assert(bt.root.left.value === 5, 'Test 5 Failed: Tree structure should remain valid after inserting a duplicate');
+
+    // Test 6: Ensure `printTree` function works without errors
+    console.log('Printing tree:');
+    BinaryTree.printTree(bt.root);
+
+    console.log('All tests passed.');
+}
+
+runTests();

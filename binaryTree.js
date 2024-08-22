@@ -61,7 +61,6 @@ class BinaryTree {
     }
 
     static toArray(bt) {
-        debugger;
         return bt.searchTree(bt.root);
     }
 
@@ -78,11 +77,19 @@ class BinaryTree {
     }
 
     static printTree(node) {
-        if(!node) return null;
+        if (!node) return null;
 
         BinaryTree.printTree(node.left);
         console.log(node.value);
         BinaryTree.printTree(node.right);
+    }
+
+    sumTree(node) {
+        if (!node) return 0;
+
+        let leftSum = this.sumTree(node.left);
+        let rightSum = this.sumTree(node.right);
+        return node.value + leftSum + rightSum;
     }
 
     isEmpty() {
@@ -135,6 +142,10 @@ function runTests() {
     //Test 7: Ensure `searchTree` function works without erres
     console.log('Converting tree to array: ');
     BinaryTree.toArray(bt);
+
+    //Test 8: Ensure `sumTree` function works witout erres
+    console.log('Summing all values of the tree: ');
+    bt.sumTree(bt.root);
 
     console.log('All tests passed.');
 }
